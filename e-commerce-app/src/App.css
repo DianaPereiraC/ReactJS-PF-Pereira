@@ -1,0 +1,16 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.img-showcase{
+  max-width: 400px;
+}
+
+.product-box {
+  outline: lightgray solid 1px;
+}
