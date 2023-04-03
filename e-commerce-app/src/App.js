@@ -5,6 +5,7 @@ import Home from "./components/home"
 import AboutUs from "./components/aboutUs"
 import CategoryContainer from "./components/categoryContainer"
 import ItemContainer from "./components/itemContainer"
+import CheckoutDetail from "./components/checkoutDetail"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -96,6 +97,7 @@ function App() {
             <Route exact path='/about-us' element={<AboutUs />} />
             <Route exact path='/category/:categoryId' element={<CategoryContainer db={ dbMock } />} />
             <Route exact path='/category/:categoryId/:productId' element={<ItemContainer db={ dbMock } />} />
+            <Route exact path='/checkout' element={<CheckoutDetail db={ dbMock } />} />
           </Routes>
         </Container>
       </BrowserRouter>

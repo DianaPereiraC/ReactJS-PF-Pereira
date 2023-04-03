@@ -26,7 +26,7 @@ function MainNavbar(props) {
                 { 
                   productList.map(item => {
                     // return <NavDropdown.Item href="#">{ item.categoryName }</NavDropdown.Item>
-                    return <NavDropdown.Item href={ `/category/${item.categoryId}` }>{ item.categoryName }</NavDropdown.Item>
+                    return <NavDropdown.Item key={item.categoryId} href={ `/category/${item.categoryId}` }>{ item.categoryName }</NavDropdown.Item>
                   })
                 }
               </NavDropdown>
