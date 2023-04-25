@@ -1,6 +1,7 @@
 import React from "react";
 import Table from 'react-bootstrap/Table';
-
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs, query, where } from "firebase/firestore"
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useNavigate } from "react-router-dom";
@@ -8,29 +9,45 @@ import Button from 'react-bootstrap/Button';
 
 function CheckoutDetail(props) {
   let currentCart = JSON.parse(localStorage.getItem('cart')) || []
-  let { db } = props
-
+  const [fbCartProductsList, setFbCartProductsList] = useState([])
+  
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const firestoreDB = getFirestore();
+
+    const cartProductIdList = currentCart.map(product => product.productId)
+    const itemsCollection = query(collection(firestoreDB, 'items'), where('id', 'in', cartProductIdList))
+    getDocs(itemsCollection).then((snapshot) => {
+      let queryResult = snapshot.docs.map((document) => (
+        {
+          ...document.data()
+        }
+      ))
+
+      let result = [queryResult, currentCart].reduce((qResult, cartList) => qResult.map((qValue, qIndex) => {return {quantity: cartList[qIndex].quantity, ...qValue}}))
+      
+      setFbCartProductsList(result)
+    })
+  }, [setFbCartProductsList, currentCart])
+  
   function emptyCart() {
     localStorage.setItem('cart', JSON.stringify([]))
+    dispatchEvent(new Event('cartUpdate'))
 
     navigate("/checkout")
   }
 
   function createProductRows() {
-    if (currentCart.length == 0) {
+    if (currentCart.length === 0) {
       return <tr><td colSpan={3}><h4 className="display-4 text-center my-4">Your cart is empty!</h4></td></tr>
     }
 
-    let allProducts = db.map(v => v.products).flat()
-
     let tableRows = []
     let totalSum = 0
-    for (const productElement of currentCart) {
-      let productInfo = allProducts.find(v => v.id == productElement.productId)
-      let totalProductPrice = (productElement.quantity*productInfo.price).toFixed(2)
-      tableRows.push(<tr><td>{ productInfo.name }</td><td>{ productElement.quantity }</td><td>${ totalProductPrice }</td></tr>)
+    for (const productElement of fbCartProductsList) {
+      let totalProductPrice = (productElement.quantity * productElement.price).toFixed(2)
+      tableRows.push(<tr><td>{ productElement.name }</td><td>{ productElement.quantity }</td><td>${ totalProductPrice }</td></tr>)
       totalSum += +totalProductPrice
     }
     tableRows.push(<tr><td colSpan={2} className="text-end fw-bold">Total:</td><td>${ totalSum.toFixed(2) }</td></tr>)

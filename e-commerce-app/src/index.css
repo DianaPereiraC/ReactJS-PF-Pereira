@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#cart-badge {
+  font-size: 10px;
+  background: #102750;
+  color: #fff;
+  padding: 1px 5px;
+  vertical-align: top;
+  border-radius: 50%;
+}

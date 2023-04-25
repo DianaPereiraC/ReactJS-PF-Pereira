@@ -4,7 +4,7 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import Container from "react-bootstrap/Container";
 
 function ItemPreview(props) {
-  let { categoryName, categoryId, products } = props.data
+  let { categoryName, products } = props.data
 
   function ProductCard(data) {
     let { categoryId, id, name, price } = data
@@ -15,9 +15,6 @@ function ItemPreview(props) {
         </a>
         <Card.Body>
           <Card.Title>{name}</Card.Title>
-          {/* <Card.Text>
-            {description}
-          </Card.Text> */}
         </Card.Body>
         <Card.Footer className="text-end">
           ${price.toFixed(2)}
@@ -32,7 +29,7 @@ function ItemPreview(props) {
       <CardGroup className="mx-auto text-start">
         {
           products.map((item) => {
-            return ProductCard({ ...item, categoryId: categoryId })
+            return ProductCard(item)
           })
         }
       </CardGroup>
